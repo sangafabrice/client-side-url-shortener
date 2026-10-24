@@ -230,7 +230,7 @@ form[name=main] {
 
         &::after {
             background-color: aliceblue;
-            border: 1px rgba(from black r g b / .4) dashed;
+            border: 1px dashed rgba(from black r g b / .4);
             border-radius: 8px;
             content: "";
             inset: 0;
