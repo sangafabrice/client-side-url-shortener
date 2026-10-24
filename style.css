@@ -146,7 +146,8 @@ form[name=main] {
                 }
             }
 
-            &:disabled, label:has(input:is(:focus:invalid, :user-invalid))+& {
+            &:disabled,
+            label:has(input:is(:focus:invalid, :user-invalid))+& {
                 background-color: cadetblue;
                 pointer-events: none;
             }
