@@ -156,6 +156,7 @@ form[name=main] {
             background-color: aliceblue;
             font-weight: 500;
             outline: none;
+            padding-inline-end: 42px;
             width: 100%;
 
             &::placeholder {
