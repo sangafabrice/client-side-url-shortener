@@ -14,20 +14,18 @@
         <h1>Client-Side<br>URL Shortener</h1>
         <!-- URL -->
         <span>
-            <label aria-label="URL">
-                <input type="url" pattern="^https?:.*" placeholder="https://example.com/page" required autofocus spellcheck="false">
-            </label>
+            <label for="url-input">URL</label>
+            <input id="url-input" type="url" pattern="^https?:.*" placeholder="https://example.com/page" required autofocus spellcheck="false">
             <button type="button" aria-label="Paste URL" class="paste"><i class="ph-fill ph-clipboard"></i></button>
         </span>
-        <button type="submit" disabled>✓</button>
         <!-- Short URL -->
         <span>
-            <label aria-label="Short URL">
-                <output aria-live="polite" aria-placeholder="Your short URL will appear here."></output>
-            </label>
+            <label for="short-url-output">Short URL</label>
+            <output id="short-url-output" aria-live="polite" aria-placeholder="Your short URL will appear here."></output>
             <button type="button" aria-label="Copy short URL" class="copy"><i class="ph-fill ph-copy"></i></button>
         </span>
         <button type="reset">↻</button>
+        <button type="submit" disabled>✓</button>
     </form>
     <dialog>
         <form method="dialog">

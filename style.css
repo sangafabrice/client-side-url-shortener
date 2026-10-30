@@ -145,10 +145,14 @@ form[name=main] {
                 }
             }
 
-            &:disabled,
-            span:has(input:is(:focus:invalid, :user-invalid))+& {
-                background-color: cadetblue;
-                pointer-events: none;
+            &[type=submit] {
+                grid-area: 2 / 2;
+
+                &:disabled,
+                span:has(input:is(:focus:invalid, :user-invalid))~& {
+                    background-color: cadetblue;
+                    pointer-events: none;
+                }
             }
         }
 
@@ -181,9 +185,8 @@ form[name=main] {
         width: 100%;
     }
 
-    label::before {
+    label {
         color: white;
-        content: attr(aria-label);
         font-family: "Black Ops One", system-ui;
         font-weight: normal;
         letter-spacing: .15em;
@@ -208,7 +211,7 @@ form[name=main] {
                 content: attr(aria-placeholder);
             }
 
-            label:has(&)+button {
+            +button {
                 display: none;
             }
 
