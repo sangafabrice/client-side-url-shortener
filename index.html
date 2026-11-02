@@ -15,24 +15,25 @@
         <!-- URL -->
         <span>
             <label for="url-input">URL</label>
-            <input id="url-input" type="url" pattern="^https?:.*" placeholder="https://example.com/page" required autofocus spellcheck="false">
-            <button type="button" aria-label="Paste URL" class="paste"><i class="ph-fill ph-clipboard"></i></button>
+            <input id="url-input" type="url" pattern="^https?:.*" title="Input your URL here." placeholder="https://example.com/page" required autofocus spellcheck="false" tabindex="2">
+            <button type="button" aria-label="Paste URL" aria-controls="url-input" aria-pressed="false" tabindex="1" class="paste"><i class="ph-fill ph-clipboard"></i></button>
         </span>
         <!-- Short URL -->
         <span>
             <label for="short-url-output">Short URL</label>
             <output id="short-url-output" aria-live="polite" aria-placeholder="Your short URL will appear here."></output>
-            <button type="button" aria-label="Copy short URL" class="copy"><i class="ph-fill ph-copy"></i></button>
+            <button type="button" aria-label="Copy short URL" aria-pressed="false" tabindex="4" class="copy"><i class="ph-fill ph-copy"></i></button>
         </span>
-        <button type="reset">↻</button>
-        <button type="submit" disabled>✓</button>
+        <button type="reset" aria-label="Reset form" aria-pressed="false" tabindex="5"><span aria-hidden="true">↻</span></button>
+        <button type="submit" aria-label="Shorten URL" aria-disabled="true" aria-pressed="false" tabindex="3" disabled><i class="ph ph-link"></i></button>
     </form>
     <dialog>
         <form method="dialog">
-            <button>×</button>
+            <button aria-label="Hide message" tabindex="6"><span aria-hidden="true">×</span></button>
         </form>
-        <p role="status" aria-live="polite"></p>
+        <p role="status"></p>
     </dialog>
+    <p role="status" aria-live="polite" class="visually-hidden"></p>
 </body>
 
 </html>

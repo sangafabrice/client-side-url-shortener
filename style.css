@@ -1,5 +1,6 @@
 @charset "utf-8";
 @import url("https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css");
+@import url("https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css");
 @import url("https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap");
 
 * {
@@ -47,7 +48,18 @@ dialog {
     background-color: rgba(from currentcolor r g b / .7);
     color: green;
     position: relative;
+    transition: margin-block-start .6s ease, opacity .6s ease;
     width: 100%;
+
+    &[open] {
+        margin-block-start: 0;
+        opacity: 1;
+
+        @starting-style {
+            margin-block-start: -25px;
+            opacity: 0;
+        }
+    }
 
     &:has(.error) {
         color: red;
@@ -124,6 +136,10 @@ form[name=main] {
                 transform: translateY(6px);
             }
 
+            &[aria-pressed=true] i:before {
+                animation: check 2s linear;
+            }
+
             &:not([type=submit]) {
                 aspect-ratio: 1 / 1;
                 background-color: lightcoral;
@@ -151,7 +167,9 @@ form[name=main] {
                 &:disabled,
                 span:has(input:is(:focus:invalid, :user-invalid))~& {
                     background-color: cadetblue;
-                    pointer-events: none;
+                    box-shadow: 0px 5px 0 black;
+                    cursor: default;
+                    transform: none;
                 }
             }
         }
@@ -239,5 +257,26 @@ form[name=main] {
             position: absolute;
             z-index: -1;
         }
+    }
+
+}
+
+button:focus-visible {
+    outline: 1px solid darkcyan;
+}
+
+.visually-hidden {
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+@keyframes check {
+    from {
+        content: "✓";
+        font: 400 1rem / 1 monospace;
     }
 }

@@ -37,7 +37,10 @@ export default class UrlController {
             });
         }
 
-        if (["http:", "https:"].includes(url.protocol)) return url.href;
+        if (["http:", "https:"].includes(url.protocol))
+            return url.origin == window.location.origin
+                ? (this.#model.findById(url.pathname.substring(1)) ?? url.href)
+                : url.href;
         
         throw new Error(this.#view.ERR_INVALID_URL_PROTOCOL, {
             cause: this.#view.ERR_INVALID_URL_PROTOCOL_CODE

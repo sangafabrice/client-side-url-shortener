@@ -3,9 +3,11 @@ export default class UrlView {
     #urlInput;
     #copyButton;
     #pasteButton;
+    #resetButton;
     #shortenButton;
+    #shortenButtonStatus;
     #shortUrlOutput;
-    #message = document.querySelector("p");
+    #message = document.querySelector("dialog p");
     #dialog = document.querySelector("dialog");
 
     constructor() {
@@ -15,7 +17,9 @@ export default class UrlView {
         this.#urlInput = document.querySelector("input");
         this.#copyButton = document.querySelector("button.copy");
         this.#pasteButton = document.querySelector("button.paste");
+        this.#resetButton = document.querySelector("button[type=reset]");
         this.#shortenButton = document.querySelector("button[type=submit]");
+        this.#shortenButtonStatus = document.querySelector("p.visually-hidden");
         this.#shortUrlOutput = document.querySelector("output");
         this.#bindCopy();
         this.#bindReset();
@@ -60,18 +64,25 @@ export default class UrlView {
             this.#clearShortUrl();
             shorten(this.#url);
             this.#showMessage("URL shortened successfully.");
+            this.#copyButton.ariaPressed = false;
+            this.#copyButton.focus();
+            this.#shortenButton.ariaPressed = true;
         });
     }
 
     bindPaste(validate) {
+        let previousClipboard = "";
+
         this.#pasteButton.addEventListener("click", async () => {
             try {
                 const candidateUrl = (await navigator.clipboard.readText()).trim();
+                previousClipboard = candidateUrl;
                 validate(candidateUrl);
                 this.#url = candidateUrl;
                 this.#focusInput();
                 this.#enableShortenButton();
                 this.#closeDialog();
+                this.#pasteButton.ariaPressed = true;
             } catch ({ cause, message }) {
                 switch (cause) {
                     case this.ERR_INVALID_URL_CODE:
@@ -85,11 +96,21 @@ export default class UrlView {
                 }
             }
         });
+
+        document.body.addEventListener("mouseover", async () => {
+            if (previousClipboard != (await navigator.clipboard.readText().then(text => text).catch(() => "")).trim()) {
+                this.#pasteButton.ariaPressed = false;
+                if (document.activeElement !== this.#urlInput)
+                    this.#pasteButton.focus();
+            }
+        });
     }
 
     bindUrlChanged(validate) {
         this.#urlInput.addEventListener("input", () => {
             this.#clearShortUrl();
+            this.#shortenButton.ariaPressed = false;
+            this.#resetButton.ariaPressed = false;
             try {
                 validate(this.#url);
                 this.#enableShortenButton();
@@ -118,10 +139,16 @@ export default class UrlView {
         this.#copyButton.addEventListener("click", async () => {
             try {
                 await navigator.clipboard.writeText(this.#shortUrl);
+                this.#copyButton.ariaPressed = true;
+                this.#copyButton.blur();
                 this.#showMessage("Short URL copied to clipboard.");
             } catch {
                 this.#showMessage("Copy failed. Please copy the URL manually.", true);
             }
+        });
+
+        document.body.addEventListener("mouseover", async () => {
+            this.#copyButton.ariaPressed = this.#shortUrl == (await navigator.clipboard.readText().then(text => text).catch(() => "")).trim();
         });
     }
 
@@ -135,6 +162,7 @@ export default class UrlView {
             this.#clearShortUrl();
             this.#focusInput();
             this.#disableShortenButton();
+            this.#resetButton.ariaPressed = true;
         });
     }
 
@@ -147,6 +175,7 @@ export default class UrlView {
         const msg = this.#message;
         msg.classList.toggle("error", isError);
         msg.textContent = message;
+        this.#setShortenButtonStatus(message);
         const sm = this.#showMessage;
         clearTimeout(sm.timeoutId);
         sm.timeoutId = setTimeout(this.#closeDialog.bind(this), 10000);
@@ -157,14 +186,23 @@ export default class UrlView {
     }
 
     #disableShortenButton() {
-        this.#shortenButton.disabled = true;
+        if (!this.#shortenButton.disabled)
+            this.#setShortenButtonStatus("URL is invalid. Shorten URL button disabled.");
+        this.#shortenButton.ariaDisabled = this.#shortenButton.disabled = true;
     }
 
     #enableShortenButton() {
-        this.#shortenButton.disabled = false;
+        if (this.#shortenButton.disabled)
+            this.#setShortenButtonStatus("URL is valid. Shorten URL button enabled.");
+        this.#shortenButton.ariaDisabled = this.#shortenButton.disabled = false;
+    }
+
+    #setShortenButtonStatus(status = "") {
+        this.#shortenButtonStatus.textContent = status;
     }
 
     #closeDialog() {
         this.#dialog.close();
+        this.#setShortenButtonStatus();
     }
 }
