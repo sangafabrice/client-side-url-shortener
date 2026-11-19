@@ -13,14 +13,14 @@ export default class UrlView {
     constructor() {
         this.#bindShowMessage();
         if (!this.isHomePage()) return;
-        this.#form = document.querySelector("form[name=main]");
-        this.#urlInput = document.querySelector("input");
-        this.#copyButton = document.querySelector("button.copy");
-        this.#pasteButton = document.querySelector("button.paste");
-        this.#resetButton = document.querySelector("button[type=reset]");
-        this.#shortenButton = document.querySelector("button[type=submit]");
-        this.#shortenButtonStatus = document.querySelector("p.visually-hidden");
-        this.#shortUrlOutput = document.querySelector("output");
+        this.#form = document.forms.main;
+        this.#urlInput = this.#form["url-input"];
+        this.#copyButton = this.#form["short-url-copy"];
+        this.#pasteButton = this.#form["url-paste"];
+        this.#resetButton = this.#form["form-reset"];
+        this.#shortenButton = this.#form["url-shorten"];
+        this.#shortenButtonStatus = document.getElementById("shorten-url-status");
+        this.#shortUrlOutput = this.#form["short-url-output"];
         this.#bindCopy();
         this.#bindReset();
     }

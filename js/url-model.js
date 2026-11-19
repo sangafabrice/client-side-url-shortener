@@ -54,6 +54,6 @@ export default class UrlModel {
     }
 
     #generateId() {
-        return crypto.randomUUID().split("-")[0];
+        return crypto?.randomUUID?.().split("-")[0] ?? Math.random().toString(36).substring(2, 15);
     }
 }
